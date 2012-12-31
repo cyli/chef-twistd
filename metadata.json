@@ -1,0 +1,33 @@
+{
+  "name": "twistd",
+  "description": "Installs twisted and sets up twistd services as resources",
+  "long_description": "",
+  "maintainer": "Ying Li",
+  "maintainer_email": "cyli@twistedmatrix.com",
+  "license": "MIT",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0"
+  },
+  "dependencies": {
+    "authbind": ">= 0.1.3"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "twistd::default": "Installs twisted"
+  },
+  "version": "0.0.1"
+}
