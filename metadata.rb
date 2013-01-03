@@ -9,4 +9,4 @@ version          "0.0.1"
 supports         "ubuntu", ">= 9.10"
 depends          "authbind"
 
-recipe          "twistd::default", "Installs twisted"
+recipe           "twistd::default", "Installs twisted"

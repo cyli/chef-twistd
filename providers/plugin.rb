@@ -1,5 +1,6 @@
 def load_current_resource
   @authbinded = false
+  @pidfile = new_resource.pidfile || "/tmp/#{new_resource.name}.twistd.pid"
 end
 
 action :add do
@@ -47,8 +48,12 @@ end
 
 # create or delete the log directory
 def log_dir(exec_action)
-  if new_resource.log_dir then
-    r = directory new_resource.log_dir do
+  dirs = [new_resource.logfile, new_resource.pidfile].map{
+    |x| ::File.dirname(x) if x && !::File.exists?(x)
+  }.compact
+
+  dirs.each do |dirpath|
+    r = directory dirpath do
       mode 0755
       owner new_resource.user
       group new_resource.user
@@ -84,6 +89,8 @@ def upstart_service(exec_action)
   else
     # don't mess up scope with instance variables
     authbinded = @authbinded
+    pidfile = @pidfile
+
     r = template "/etc/init/#{new_resource.name}.conf" do
       cookbook "twistd"
       source "twistd_plugin.conf.erb"
@@ -94,7 +101,8 @@ def upstart_service(exec_action)
         :service_name => new_resource.name,
         :authbinded => authbinded,
         :user => new_resource.user || "root",
-        :log_dir => new_resource.log_dir,
+        :logfile => new_resource.logfile,
+        :pidfile => pidfile,
         :twistd_command => new_resource.twistd_command,
         :args => new_resource.args || []
       })

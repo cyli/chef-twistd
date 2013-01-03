@@ -23,9 +23,8 @@ def dns_plugin_resource(exec_action)
 
   r = twistd_plugin new_resource.name do
     user new_resource.user
-
-    log_dir new_resource.log_dir
-
+    logfile new_resource.logfile
+    pidfile new_resource.pidfile
     authbind_ports [new_resource.port || 53]
     twistd_command "dns"
     args args
