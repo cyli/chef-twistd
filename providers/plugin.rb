@@ -3,7 +3,6 @@ def load_current_resource
 end
 
 action :add do
-  service_user        :create
   authbind_ports      :create
   log_dir             :create
   upstart_service     :create
@@ -14,9 +13,7 @@ action :remove do
   upstart_service     :delete
   log_dir             :delete
   authbind_ports      :delete
-  service_user        :delete
 end
-
 
 
 # authbind (or unbind) the ports that need to be authbinded
@@ -44,34 +41,6 @@ def authbind_ports(exec_action)
       @authbinded = (
         @authbinded || (a_port < 1024 && new_resource.user != "root"))
     end
-  end
-end
-
-
-# create/delete the user and possibly add it to some groups if creating
-def service_user(exec_action)
-  if new_resource.user
-
-    u = user new_resource.user do
-      home new_resource.user_home if new_resource.user_home
-      manage_home true if new_resource.user_home
-      action :nothing
-    end
-    u.run_action(exec_action == :delete ? :remove : exec_action)
-    new_resource.updated_by_last_action(true) if u.updated_by_last_action?
-
-    if exec_action == :create then
-      (new_resource.groups || []).each do |a_group|
-        g = group a_group do
-          append true
-          members new_resource.user
-          action :nothing
-        end
-        g.run_action(:create)
-        new_resource.updated_by_last_action(true) if g.updated_by_last_action?
-      end
-    end
-
   end
 end
 
@@ -126,7 +95,6 @@ def upstart_service(exec_action)
         :authbinded => authbinded,
         :user => new_resource.user || "root",
         :log_dir => new_resource.log_dir,
-        :user_home => new_resource.user_home,
         :twistd_command => new_resource.twistd_command,
         :args => new_resource.args || []
       })

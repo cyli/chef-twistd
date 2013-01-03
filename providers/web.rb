@@ -34,11 +34,7 @@ def web_plugin_resource(exec_action)
 
   r = twistd_plugin new_resource.name do
     user new_resource.user
-    user_home new_resource.user_home
-    groups new_resource.groups
-
     log_dir new_resource.log_dir
-
     authbind_ports ports
     twistd_command "web"
     args args

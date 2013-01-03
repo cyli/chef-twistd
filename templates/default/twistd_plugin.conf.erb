@@ -11,7 +11,7 @@ exec su - <%= @user %> -c '<%= "authbind --deep " if @authbinded %>twistd -n \
 <% else %>
 exec twistd -n \
 <% end %>
-<% if @log_dir.nil? && @user_home.nil? %>
+<% if @log_dir.nil? %>
     --pidfile "/tmp/<%= @service_name %>.twistd.pid"
 <% end %>
 <% if @log_dir %>

@@ -23,7 +23,6 @@ def dns_plugin_resource(exec_action)
 
   r = twistd_plugin new_resource.name do
     user new_resource.user
-    user_home new_resource.user_home
 
     log_dir new_resource.log_dir
 
