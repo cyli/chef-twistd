@@ -55,8 +55,8 @@ def log_dir(exec_action)
   dirs.each do |dirpath|
     r = directory dirpath do
       mode 0755
-      owner new_resource.user
-      group new_resource.user
+      owner new_resource.user || "root"
+      group new_resource.user || "root"
       recursive true if exec_action == :create
       action :nothing
     end
