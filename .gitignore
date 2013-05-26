@@ -1,1 +1,5 @@
+*.sublime-*
 tmp/
+Gemfile
+Gemfile.lock
+metadata.json

@@ -33,19 +33,12 @@ cookbook are insufficient.
 * `authbind_ports` (*Array of ints*) - ports that need authbinding - this isn't
     necessary if the port is greater than or equal to 1024, or if the service
     will be run as root
-* `log_dir` (*String*) - the directory the Twisted logs and pidfile will be
-    written to.  If not provided, by default there will be no log files and
-    the pidfile will go into the home directory of the user the service will be
-    run as, or `/tmp/<service_name>.twistd.pid` if the user is root or the user
-    has no home directory.
-* `user` (*String*) - the user the service will run as.  If the user does not
-    exist, it will be created.
-* `user_home` (*String*) - the home directory for the user that will run the
-    service.  This can be used as a data directory, or the logs could be stored
-    here as well.
-* `groups` (*Array of Strings*) - any extra groups the user should belong to.
-    For example, if running a Twisted web server, the user may need to also
-    belong to the group `ssl_cert`
+* `logfile` (*String*) - the file the Twisted log will be written to.  If not
+    provided, by default there will be no log files
+* `pidfile` (*String*) - the file the Twisted pid file will be written to.  If
+    not provided the pidfile will go into `/tmp/<service_name>.twistd.pid`.
+* `user` (*String*) - the user the service will run as.  If provided, will
+    autbind port to this user.  If not provided, the plugin will run as root.
 
 # Default `twistd` plugin resources and providers
 
@@ -60,19 +53,12 @@ Twisted (only `web` and `dns` so far).  They all use the general twisted plugin 
     - only one of these should be passed - they are all different ways to
     specify the root Twisted resource (not chef resource) to use for the web
     server - see `twistd web --help` for more information
-* `log_dir` (*String*) - the directory the Twisted logs and pidfile will be
-    written to.  If not provided, by default there will be no log files and
-    the pidfile will go into the home directory of the user the service will be
-    run as, or `/tmp/<service_name>.twistd.pid` if the user is root or the user
-    has no home directory.
-* `user` (*String*) - the user the service will run as.  If the user does not
-    exist, it will be created.  Defaults to "web".
-* `user_home` (*String*) - the home directory for the user that will run the
-    service.  This can be used as a data directory, or the logs could be stored
-    here as well.
-* `groups` (*Array of Strings*) - any extra groups the user should belong to.
-    For example, since this is a web server, the user may need to also
-    belong to the group `ssl_cert`
+* `logfile` (*String*) - the file the Twisted log will be written to.  If not
+    provided, by default there will be no log files
+* `pidfile` (*String*) - the file the Twisted pid file will be written to.  If
+    not provided the pidfile will go into `/tmp/<service_name>.twistd.pid`.
+* `user` (*String*) - the user the service will run as (not root).  Defaults
+    to "web".
 
 ### `twistd_dns` attributes
 
@@ -81,13 +67,9 @@ Twisted (only `web` and `dns` so far).  They all use the general twisted plugin 
 * `secondaries` (*Hash of String to String*) - a hash of domains mapped to IP's
 * `pyzones` (*Array of String*) - an array of paths to pyzone definitions
 * `bindzones` (*Array of String*) - an array of paths to bindzone definitions
-* `log_dir` (*String*) - the directory the Twisted logs and pidfile will be
-    written to.  If not provided, by default there will be no log files and
-    the pidfile will go into the home directory of the user the service will be
-    run as, or `/tmp/<service_name>.twistd.pid` if the user is root or the user
-    has no home directory.
-* `user` (*String*) - the user the service will run as.  If the user does not
-    exist, it will be created.  Defaults to "dns".
-* `user_home` (*String*) - the home directory for the user that will run the
-    service.  This can be used as a data directory, or the logs could be stored
-    here as well.
+* `logfile` (*String*) - the file the Twisted log will be written to.  If not
+    provided, by default there will be no log files
+* `pidfile` (*String*) - the file the Twisted pid file will be written to.  If
+    not provided the pidfile will go into `/tmp/<service_name>.twistd.pid`.
+* `user` (*String*) - the user the service will run as (not root).  Defaults
+    to "dns".
