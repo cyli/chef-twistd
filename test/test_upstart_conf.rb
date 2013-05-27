@@ -10,6 +10,7 @@ TEMPLATE = ERB.new(File.new(template_file).read)
 
 
 class TestTemplate < Minitest::Test
+  # Delete all the instance variables required for the template
   def setup
     delete_vars = ["@service_name", "@twistd_command", "@args"]
     instance_variables.each do |ivar|
