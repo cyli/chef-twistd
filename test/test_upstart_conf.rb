@@ -1,31 +1,25 @@
 require 'minitest/autorun'
 
-require 'erb'
+# chef uses erubus and not erb for tmeplates:
+# http://docs.opscode.com/essentials_cookbook_templates.html
+require 'erubis'
 require 'ostruct'
 
 template_file = File.expand_path(File.join(
   File.dirname(__FILE__), "../templates/default/twistd_plugin.conf.erb"))
 
-TEMPLATE = ERB.new(File.new(template_file).read)
+TEMPLATE =  Erubis::Eruby.new(File.read(template_file))
 
 
 class TestTemplate < Minitest::Test
-  # Delete all the instance variables required for the template
-  def setup
-    delete_vars = ["@service_name", "@twistd_command", "@args"]
-    instance_variables.each do |ivar|
-      if delete_vars.include? ivar
-        remove_instance_variable(ivar)
-      end
-    end
-  end
-
   # If the user is root, no need for "su -"
   def test_required_plugin_arguments
-      @service_name = 'service'
-      @user = 'root'
-      @twistd_command = 'command'
-      @args = []
+    result = TEMPLATE.evaluate(
+      :service_name => 'service',
+      :user => 'root',
+      :twistd_command => 'command',
+      :args => []
+    )
 
     expected = [
       'description                     "Twistd service: service"',
@@ -40,6 +34,6 @@ class TestTemplate < Minitest::Test
       '    command',
     ].join('\n')
 
-    assert_equal expected, TEMPLATE.result(binding)
+    assert_equal expected, result
   end
 end
