@@ -15,7 +15,12 @@ exec twistd -n \
 <% if @logfile %>
     --logfile <%= @logfile %> \
 <% end %>
-    <%= @twistd_command %><%= "\\" if @args.length > 0 %>
+    <%= @twistd_command -%>
+<% if @args.length > 0 %>
+<%=     "\\" if @args.length > 0 %>
+<% else %>
+<%=     "'" if @user != "root" %>
+<% end %>
 <% @args.each do |argline| %>
     <%= argline %> \
-<% end %><%= "'" if @user != "root" %>
+<% end %><%= "'" if @args.length > 0 && @user != "root" %>

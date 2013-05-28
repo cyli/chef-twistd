@@ -16,7 +16,7 @@ TEMPLATE =  Erubis::Eruby.new(File.read(template_file))
 
 class TestTemplate < Minitest::Test
   # If the user is root, no need for "su -"
-  def test_required_plugin_arguments
+  def test_user_is_root
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'root',
@@ -37,6 +37,33 @@ class TestTemplate < Minitest::Test
       exec twistd -n \\
           --pidfile /tmp/pidfile
           command
+
+    eof
+    assert_equal expected, result
+  end
+
+  # If the user is not root, run su -
+  def test_user_not_root
+    result = TEMPLATE.evaluate(
+      :service_name => 'service',
+      :user => 'me',
+      :twistd_command => 'command',
+      :pidfile => '/tmp/pidfile',
+      :args => []
+    )
+
+    expected = <<-eof.gsub(/^ {6}/, '')
+      description                     "Twistd service: service"
+      author                          "Ying Li <cyli@twistedmatrix.com>"
+
+      start on runlevel [2345]
+      stop on runlevel [016]
+
+      respawn
+
+      exec su - me -c 'twistd -n \\
+          --pidfile /tmp/pidfile
+          command'
 
     eof
     assert_equal expected, result
