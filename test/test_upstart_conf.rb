@@ -26,8 +26,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -52,8 +52,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -79,8 +79,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -106,8 +106,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -133,8 +133,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -160,8 +160,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
@@ -190,8 +190,8 @@ class TestTemplate < Minitest::Test
     )
 
     expected = <<-eof.gsub(/^ {6}/, '')
-      description                     "Twistd service: service"
-      author                          "Ying Li <cyli@twistedmatrix.com>"
+      description                     "TwistD service: service"
+      author                          "chef-twistd cookbook"
 
       start on runlevel [2345]
       stop on runlevel [016]
