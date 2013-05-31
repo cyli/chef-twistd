@@ -4,7 +4,7 @@ attribute :name, :kind_of => String, :name_attribute => true
 attribute :twistd_command, :kind_of => String, :required => true
 
 # arguments to provide to the twistd command, line by line
-attribute :args, :kind_of => Array, :required => true
+attribute :args, :kind_of => Array, :required => false, :default => []
 
 # which ports may need to be authbinded
 attribute :authbind_ports, :kind_of => Array, :required => false, :default => nil
