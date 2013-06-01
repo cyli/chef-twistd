@@ -9,7 +9,7 @@ require 'ostruct'
 # specifically http://www.kuwata-lab.com/erubis/users-guide.06.html for docs
 
 template_file = File.expand_path(File.join(
-  File.dirname(__FILE__), "../templates/default/twistd_plugin.conf.erb"))
+  File.dirname(__FILE__), "../../templates/default/twistd_plugin.conf.erb"))
 
 TEMPLATE =  Erubis::Eruby.new(File.read(template_file))
 

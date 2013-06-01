@@ -3,28 +3,17 @@
 
 
 require 'rspec'
+require 'spec_helper'
 
-require 'chef/run_context'
-require 'chef/resource'
-require 'chef/provider'
-require 'chef/cookbook/metadata'
 require 'chef/event_dispatch/dispatcher'
-
-md = Chef::Cookbook::Metadata.new
-md.from_file(File.join(File.dirname(__FILE__), %w[.. metadata.rb]))
-
-
-Chef::Resource.build_from_file(
-  md.name,
-  File.join(File.dirname(__FILE__), %w[.. resources plugin.rb]),
-  @run_context)
-Chef::Provider.build_from_file(
-  md.name,
-  File.join(File.dirname(__FILE__), %w[.. providers plugin.rb]),
-  @run_context)
+require 'chef/platform'
+require 'chef/provider/directory'
+require 'chef/provider/service/upstart'
+require 'chef/provider/template'
+require 'chef/resource/service'
 
 
-describe 'Chef::Provider::TwistdPlugin' do
+describe Chef::Provider::TwistdPlugin do
   before do
     @node = Chef::Node.new
     @node.set["name"] = 'plugin'
@@ -53,6 +42,20 @@ describe 'Chef::Provider::TwistdPlugin' do
       @new_resource.instance_variable_set(:@pidfile, "/my/pid/file")
       @provider.load_current_resource
       @provider.instance_variable_get(:@pidfile).should == "/my/pid/file"
+    end
+  end
+
+  describe "create" do
+    before do
+      @directory = Object.new
+      @service = Object.new
+      @template = Object.new
+      Chef::Provider::Template.stub!(:new).and_return(@template)
+      Chef::Resource::Service.stub!(:new).and_return(@service)
+    end
+
+    it 'test' do
+      @provider.run_action(:add)
     end
   end
 end

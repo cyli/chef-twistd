@@ -7,7 +7,7 @@ attribute :twistd_command, :kind_of => String, :required => true
 attribute :args, :kind_of => Array, :required => false, :default => []
 
 # which ports may need to be authbinded
-attribute :authbind_ports, :kind_of => Array, :required => false, :default => nil
+attribute :authbind_ports, :kind_of => Array, :required => false, :default => []
 
 # where the logfile should go - default no logs
 attribute :logfile, :kind_of => String, :required => false, :default => nil
@@ -16,7 +16,7 @@ attribute :logfile, :kind_of => String, :required => false, :default => nil
 attribute :pidfile, :kind_of => String, :required => false, :default => nil
 
 # the user to run the service as (generally should not run as root)
-attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => false, :default => nil
+attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => false, :default => "root"
 
 
 def initialize( *args )

@@ -20,8 +20,7 @@ end
 # authbind (or unbind) the ports that need to be authbinded
 def authbind_ports(exec_action)
   unless new_resource.user.nil? then
-    ports = new_resource.authbind_ports || []
-    ports.each do |a_port|
+    new_resource.authbind_ports.each do |a_port|
       r = authbind_port "#{exec_action}:#{a_port}:#{new_resource.user}" do
         port a_port
         user new_resource.user
