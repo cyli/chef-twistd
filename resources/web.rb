@@ -2,8 +2,8 @@ actions :add, :remove
 
 
 attribute :name, :kind_of => String, :name_attribute => true
-attribute :port, :kind_of => Integer, :required => true, :default => 80
-attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => true, :default => "web"
+attribute :port, :kind_of => Integer, :required => false, :default => 8080
+attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => false, :default => "web"
 
 attribute :logfile, :kind_of => String, :required => false, :default => nil
 attribute :pidfile, :kind_of => String, :required => false, :default => nil

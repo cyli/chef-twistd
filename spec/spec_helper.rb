@@ -16,3 +16,21 @@ Chef::Provider.build_from_file(
   md.name,
   File.join(File.dirname(__FILE__), %w[.. providers plugin.rb]),
   @run_context)
+
+Chef::Resource.build_from_file(
+  md.name,
+  File.join(File.dirname(__FILE__), %w[.. resources web.rb]),
+  @run_context)
+Chef::Provider.build_from_file(
+  md.name,
+  File.join(File.dirname(__FILE__), %w[.. providers web.rb]),
+  @run_context)
+
+Chef::Resource.build_from_file(
+  md.name,
+  File.join(File.dirname(__FILE__), %w[.. resources dns.rb]),
+  @run_context)
+Chef::Provider.build_from_file(
+  md.name,
+  File.join(File.dirname(__FILE__), %w[.. providers dns.rb]),
+  @run_context)

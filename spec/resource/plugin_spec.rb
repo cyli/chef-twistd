@@ -8,7 +8,7 @@ describe Chef::Resource::TwistdPlugin do
     @resource = Chef::Resource::TwistdPlugin.new("plugin_name")
   end
 
-  it "should create a new Chef::Resource::Twistd" do
+  it "should create a new Chef::Resource::TwistdPlugin" do
     @resource.should be_a_kind_of(Chef::Resource)
     @resource.should be_a_kind_of(Chef::Resource::TwistdPlugin)
   end
@@ -85,7 +85,7 @@ describe Chef::Resource::TwistdPlugin do
     @resource.user.should eql("root")
   end
 
-  it "should accept an string that matches the regexp for the user" do
+  it "should accept a string that matches the regexp for the user" do
     @resource.user "user"
     @resource.user.should eql("user")
   end

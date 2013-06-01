@@ -2,8 +2,8 @@ actions :add, :remove
 
 
 attribute :name, :kind_of => String, :name_attribute => true
-attribute :port, :kind_of => Integer, :required => false, :default => 53
-attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => true, :default => "dns"
+attribute :port, :kind_of => Integer, :required => false, :default => 5353
+attribute :user, :regex => /^([a-z]|[A-Z]|[0-9]|_|-)+$/, :required => false, :default => "dns"
 attribute :logfile, :kind_of => String, :required => false, :default => nil
 attribute :pidfile, :kind_of => String, :required => false, :default => nil
 
