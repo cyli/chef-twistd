@@ -1,4 +1,4 @@
-require 'minitest/autorun'
+require 'rspec'
 
 # chef uses erubus and not erb for tmeplates:
 # http://docs.opscode.com/essentials_cookbook_templates.html
@@ -14,9 +14,8 @@ template_file = File.expand_path(File.join(
 TEMPLATE =  Erubis::Eruby.new(File.read(template_file))
 
 
-class TestTemplate < Minitest::Test
-  # If the user is root, no need for "su -"
-  def test_user_is_root
+describe 'twistd_plugin upstart conf' do
+  it "should not add 'su -' if the user is not root" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'root',
@@ -38,11 +37,11 @@ class TestTemplate < Minitest::Test
           --pidfile /tmp/pidfile \\
           command
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If the user is not root, run su -
-  def test_user_not_root
+  it "should not include 'su -' if the user is not root" do
+    # the closing quote should be in the right place too
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'me',
@@ -64,11 +63,10 @@ class TestTemplate < Minitest::Test
           --pidfile /tmp/pidfile \\
           command'
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If the authbind ports are provided but the user is root, not authbinded
-  def test_authbind_user_root
+  it "should not authbind if authbind ports are provided but user is root" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'root',
@@ -91,11 +89,10 @@ class TestTemplate < Minitest::Test
           --pidfile /tmp/pidfile \\
           command
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If the authbind ports are provided and the user is not root, authbinded
-  def test_authbind_user_not_root
+  it "should authbind if authbind ports are provided and user is not root" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'me',
@@ -118,11 +115,10 @@ class TestTemplate < Minitest::Test
           --pidfile /tmp/pidfile \\
           command'
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If the logfile is provided, include it as an option
-  def test_include_logfile
+  it "should include logfile as an option if provided" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'root',
@@ -146,11 +142,10 @@ class TestTemplate < Minitest::Test
           --logfile /var/log/log \\
           command
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If args are included, each is printed on a separate line
-  def test_line_per_arg
+  it "should print one arg per line, if args are provided" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'root',
@@ -175,12 +170,10 @@ class TestTemplate < Minitest::Test
           arg2 \\
           arg3
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
-  # If args are included, each is printed on a separate line.  The closing
-  # single quote is in the right place, if the user is not root
-  def test_line_per_arg_as_non_root
+  it "should print one arg per line and put the quote after args" do
     result = TEMPLATE.evaluate(
       :service_name => 'service',
       :user => 'me',
@@ -205,7 +198,7 @@ class TestTemplate < Minitest::Test
           arg2 \\
           arg3'
     eof
-    assert_equal expected, result
+    result.should eql expected
   end
 
 end
