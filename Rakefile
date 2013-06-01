@@ -1,16 +1,16 @@
 #!/usr/bin/env rake
 
 require 'foodcritic'
-require 'rake/testtask'
+require 'rake'
+require 'rspec/core/rake_task'
 
 FoodCritic::Rake::LintTask.new do |t|
   t.options = { :fail_tags => ['any'] }
 end
 
-Rake::TestTask.new do |i|
-  i.pattern = 'test/test_*.rb'
-  i.verbose = true
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.fail_on_error = false
 end
 
-task :default => [:foodcritic]
+task :default => [:spec]
 task :lint => [:foodcritic]
