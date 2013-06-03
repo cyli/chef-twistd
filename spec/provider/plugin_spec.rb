@@ -4,7 +4,23 @@ require 'spec_helper'
 
 require 'chefspec'
 
+require 'chef/event_dispatch/dispatcher'
 require 'chef/resource/template'
+require 'chef/run_context'
+
+class Chef
+  class Resource
+    class AuthbindPort < Chef::Resource
+    end
+  end
+end
+
+class Chef
+  class Provider
+    class AuthbindPort < Chef::Provider
+    end
+  end
+end
 
 
 # https://github.com/acrmp/chefspec/issues/107
@@ -92,44 +108,53 @@ describe Chef::Provider::TwistdPlugin do
         :args => ['--arg1', '--arg2']
       })
     end
+  end
 
-    # it 'should authbind if the user is not root and the ports < 1024' do
-    #   runner.converge "fixtures::plugin_authbind"
-    #   check_template(runner.resources, {
-    #     :service_name => 'authbind',
-    #     :authbinded => true,
-    #     :user => 'my_user',
-    #     :logfile => nil,
-    #     :pidfile => '/tmp/command_and_user.twistd.pid',
-    #     :twistd_command => 'my_plugin',
-    #     :args => []
-    #   })
-    # end
+  describe "support authbind", :skip => true do
+    before do
+      @events = Chef::EventDispatch::Dispatcher.new
+      @run_context = Chef::RunContext.new(runner.node, {}, @events)
+      @authbind = Chef::Resource::AuthbindPort.new(@run_context)
+      Chef::Resource::AuthbindPort.stub!(:new).and_return(@authbind)
+    end
 
-    # it 'should not authbind if the user is root' do
-    #   runner.converge "fixtures::plugin_root_authbind"
-    #   check_template(runner.resources, {
-    #     :service_name => 'root_authbind',
-    #     :authbinded => false,
-    #     :user => 'root',
-    #     :logfile => nil,
-    #     :pidfile => '/tmp/command_and_user.twistd.pid',
-    #     :twistd_command => 'my_plugin',
-    #     :args => []
-    #   })
-    # end
+    it 'should authbind if the user is not root and the ports < 1024' do
+      runner.converge "fixtures::plugin_authbind"
+      check_template(runner.resources, {
+        :service_name => 'authbind',
+        :authbinded => true,
+        :user => 'my_user',
+        :logfile => nil,
+        :pidfile => '/tmp/command_and_user.twistd.pid',
+        :twistd_command => 'my_plugin',
+        :args => []
+      })
+    end
 
-    # it 'should not authbind if the ports >= 1024' do
-    #   runner.converge "fixtures::plugin_authbind_high_port"
-    #   check_template(runner.resources, {
-    #     :service_name => 'authbind_high_port',
-    #     :authbinded => false,
-    #     :user => 'my_user',
-    #     :logfile => nil,
-    #     :pidfile => '/tmp/command_and_user.twistd.pid',
-    #     :twistd_command => 'my_plugin',
-    #     :args => []
-    #   })
-    # end
+    it 'should not authbind if the user is root' do
+      runner.converge "fixtures::plugin_root_authbind"
+      check_template(runner.resources, {
+        :service_name => 'root_authbind',
+        :authbinded => false,
+        :user => 'root',
+        :logfile => nil,
+        :pidfile => '/tmp/command_and_user.twistd.pid',
+        :twistd_command => 'my_plugin',
+        :args => []
+      })
+    end
+
+    it 'should not authbind if the ports >= 1024' do
+      runner.converge "fixtures::plugin_authbind_high_port"
+      check_template(runner.resources, {
+        :service_name => 'authbind_high_port',
+        :authbinded => false,
+        :user => 'my_user',
+        :logfile => nil,
+        :pidfile => '/tmp/command_and_user.twistd.pid',
+        :twistd_command => 'my_plugin',
+        :args => []
+      })
+    end
   end
 end

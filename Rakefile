@@ -10,7 +10,7 @@ end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.fail_on_error = false
-  t.rspec_opts = ['-f d']
+  t.rspec_opts = ['-f d', '--tag ~skip']
 end
 
 task :default => [:spec]
