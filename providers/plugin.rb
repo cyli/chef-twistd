@@ -4,43 +4,45 @@ def load_current_resource
 end
 
 action :add do
-  authbind_ports      :create
-  log_dir             :create
-  upstart_service     :create
+  converge_by("add") do
+    authbind_ports      :create
+    log_dir             :create
+    upstart_service     :create
+  end
 end
 
 
 action :remove do
-  upstart_service     :delete
-  log_dir             :delete
-  authbind_ports      :delete
+  converge_by("delete") do
+    upstart_service     :delete
+    log_dir             :delete
+    authbind_ports      :delete
+  end
 end
 
 
 # authbind (or unbind) the ports that need to be authbinded
 def authbind_ports(exec_action)
-  unless new_resource.user.nil? then
-    new_resource.authbind_ports.each do |a_port|
-      r = authbind_port "#{exec_action}:#{a_port}:#{new_resource.user}" do
-        port a_port
-        user new_resource.user
-        group new_resource.user
-        only_if {
-          exec_action == :delete ||
-          (a_port < 1024 && new_resource.user != "root")
-        }
-        action :nothing
-      end
-      r.run_action(exec_action == :delete ? :remove : :add)
-
-      if r.updated_by_last_action? then
-        new_resource.updated_by_last_action(true)
-        Chef::Log::info("#{exec_action} authbind port #{a_port} to user #{new_resource.user} for twistd service #{new_resource.name}")
-      end
-
-      @authbinded = (
-        @authbinded || (a_port < 1024 && new_resource.user != "root"))
+  new_resource.authbind_ports.each do |a_port|
+    r = authbind_port "#{exec_action}:#{a_port}:#{new_resource.user}" do
+      port a_port
+      user new_resource.user
+      group new_resource.user
+      only_if {
+        exec_action == :delete ||
+        (a_port < 1024 && new_resource.user != "root")
+      }
+      action :nothing
     end
+    r.run_action(exec_action == :delete ? :remove : :add)
+
+    if r.updated_by_last_action? then
+      new_resource.updated_by_last_action(true)
+      Chef::Log::info("#{exec_action} authbind port #{a_port} to user #{new_resource.user} for twistd service #{new_resource.name}")
+    end
+
+    @authbinded = (
+      @authbinded || (a_port < 1024 && new_resource.user != "root"))
   end
 end
 
@@ -99,11 +101,11 @@ def upstart_service(exec_action)
       variables({
         :service_name => new_resource.name,
         :authbinded => authbinded,
-        :user => new_resource.user || "root",
+        :user => new_resource.user,
         :logfile => new_resource.logfile,
         :pidfile => pidfile,
         :twistd_command => new_resource.twistd_command,
-        :args => new_resource.args || []
+        :args => new_resource.args
       })
       action :nothing
     end
